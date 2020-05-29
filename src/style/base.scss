@@ -1,0 +1,92 @@
+// 搜索框
+#app .search-box {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  label {
+    margin: 0 10px 5px 10px;
+  }
+  input,
+  select,
+  .cascader {
+    width: 200px;
+    display: inline-block;
+  }
+  button {
+    background: #045fc9;
+    color: #fff;
+    margin: 0 5px 5px 0;
+    padding: 0 10px;
+    &:hover {
+      background: #158ae7;
+    }
+  }
+}
+
+//滚动条样式
+.scroll-bar,
+.cascader > .box > ul {
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-track-piece {
+    background-color: #fafafa;
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:vertical {
+    background-color: #ccc;
+    border-radius: 3px;
+  }
+}
+
+//button样式
+td {
+  button {
+    border: 1px solid #158ae7;
+    color: #158ae7;
+    min-width: 45px;
+    &:hover {
+      background-color: #158ae7;
+      color: #fff;
+    }
+  }
+}
+button.remove {
+  border: 1px solid #ff4949;
+  color: #ff4949;
+  &:hover {
+    background-color: #ff4949;
+    color: #fff;
+  }
+}
+button.major {
+  border: 1px solid #158ae7;
+  color: #158ae7;
+  background: #fff;
+  &:hover {
+    background: #158ae7;
+    color: #fff;
+  }
+}
+
+// 文件下载按钮的样式
+span.linksss {
+  color: #158ae7;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.link {
+  color: #158ae7;
+  cursor: pointer;
+  max-width: 200px;
+  word-wrap: break-word;
+  margin: 0 auto;
+  display: block;
+  &:hover {
+    text-decoration: underline;
+  }
+}
