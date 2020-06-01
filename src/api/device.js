@@ -38,3 +38,23 @@ export function importDevice(data) {
     data,
   })
 }
+
+/**
+ * @description 保存设备信息
+ * @param id ID
+ * @param deviceName 设备名称
+ * @param deviceSort 设备类型
+ * @param deviceType 设备厂家/型号
+ * @param position 机房位置
+ * @param cabinetNumber 机柜编号
+ * @param systemVersion 操作系统版本
+ * @param midVersion 中间件版本
+ * @param dbVersion 数据库版本
+ */
+export function save(data) {
+  return request({
+    url: '/device/save',
+    method: 'post',
+    data,
+  })
+}

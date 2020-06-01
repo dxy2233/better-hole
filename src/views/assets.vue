@@ -42,6 +42,9 @@
       <baseCol prop="ipAddress" label="私网IP地址" />
       <baseCol label="操作">
         <template #button="props">
+          <button v-if="props.row.editVisible">
+            编辑
+          </button>
           <button
             v-if="props.row.deleteVisible"
             class="remove"
@@ -59,6 +62,39 @@
       :pages="tableData.pages"
       @changeCurrentPage="init"
     />
+
+    <baseDialog :visible.sync="dialog" top="20px">
+      <template #title>编辑资产信息</template>
+      <baseForm ref="holeForm" :form="form" :rules="rules">
+        <!-- <baseFormItem label="设备名称">
+          <input type="text" v-model="form.deviceName" />
+        </baseFormItem>
+        <baseFormItem label="设备类型">
+          <input type="text" v-model="form.deviceSort" />
+        </baseFormItem>
+        <baseFormItem label="设备厂家/型号">
+          <input type="text" v-model="form.deviceType" />
+        </baseFormItem>
+        <baseFormItem label="机房位置">
+          <input type="text" v-model="form.position" />
+        </baseFormItem>
+        <baseFormItem label="机柜编号">
+          <input type="text" v-model="form.cabinetNumber" />
+        </baseFormItem>
+        <baseFormItem label="操作系统版本">
+          <input type="text" v-model="form.systemVersion" />
+        </baseFormItem>
+        <baseFormItem label="中间件版本">
+          <input type="text" v-model="form.midVersion" />
+        </baseFormItem>
+        <baseFormItem label="数据库版本">
+          <input type="text" v-model="form.dbVersion" />
+        </baseFormItem>
+        <button type="button" @click="submit">
+          <svg-icon icon-class="save" />保存
+        </button> -->
+      </baseForm>
+    </baseDialog>
   </div>
 </template>
 
@@ -80,6 +116,9 @@ export default {
       },
       systemListByUser: [],
       tableData: {},
+      form: {},
+      rules: {},
+      dialog: false,
     }
   },
   created() {
