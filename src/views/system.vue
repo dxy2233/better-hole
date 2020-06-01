@@ -33,7 +33,7 @@
     <main>
       <div v-if="assetsTableData.list">
         <div class="caption">信息系统名称资产信息</div>
-        <baseTable :tableData="assetsTableData.list">
+        <baseTable :tableData="assetsTableData.list" @rowClick="assetsTableRow">
           <baseCol prop="serialNumber" label="序号" />
           <baseCol prop="systemName" label="信息系统" />
           <baseCol prop="importName" label="导入人" />
@@ -114,10 +114,22 @@ import {
 } from '@/api/systemOrgNode'
 import { getSystemListByOrgId, save, deleteById } from '@/api/system'
 import { getDeviceList } from '@/api/device'
-import { getFlawList } from '@/api/flaw'
+import { getFlawListByDeviceId } from '@/api/flaw'
 
 export default {
   name: 'System',
+  filters: {
+    reformStatusFilter(val) {
+      switch (val) {
+        case 0:
+          return '未整改'
+        case 1:
+          return '已整改'
+        case 2:
+          return '挂起'
+      }
+    },
+  },
   data() {
     return {
       treeData: [],
@@ -152,7 +164,7 @@ export default {
       holeTableForm: {
         startPage: 1,
         pageSize: 20,
-        systemId: '',
+        deviceId: '',
       },
       holeTableData: {},
     }
@@ -215,8 +227,8 @@ export default {
       this.activeSystem = info
       this.assetsTableForm.systemId = info.id
       this.initAssets()
-      this.holeTableForm.systemId = info.id
-      this.initHole()
+      // this.holeTableForm.systemId = info.id
+      // this.initHole()
     },
     removeSystem(id) {
       this.$confirm('确认删除？', '提示').then(() => {
@@ -234,9 +246,13 @@ export default {
         this.assetsTableData = res.data
       })
     },
+    assetsTableRow(item) {
+      this.holeTableForm.deviceId = item.id
+      this.initHole()
+    },
     initHole(isSearch) {
       if (isSearch) this.holeTableForm.startPage = 1
-      getFlawList(this.holeTableForm).then((res) => {
+      getFlawListByDeviceId(this.holeTableForm).then((res) => {
         this.holeTableData = res.data
       })
     },

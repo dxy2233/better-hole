@@ -50,6 +50,10 @@ export function importDevice(data) {
  * @param systemVersion 操作系统版本
  * @param midVersion 中间件版本
  * @param dbVersion 数据库版本
+ * @param ipAddress IP地址
+ * @param port 端口
+ * @param url 应用WEB URL地址
+ * @param remark 备注
  */
 export function save(data) {
   return request({

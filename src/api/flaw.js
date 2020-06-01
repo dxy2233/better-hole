@@ -51,6 +51,20 @@ export function getFlawList(data) {
 }
 
 /**
+ * @description 根据资产查询漏洞条件和分页查询
+ * @param startPage 页面编号
+ * @param pageSize 页面大小
+ * @param deviceId 资产id
+ */
+export function getFlawListByDeviceId(data) {
+  return request({
+    url: '/flaw/getFlawListByDeviceId',
+    method: 'post',
+    data,
+  })
+}
+
+/**
  * @description 保存漏洞信息
  * @param id id
  * @param systemId 系统
