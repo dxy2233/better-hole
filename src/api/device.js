@@ -29,6 +29,26 @@ export function getDeviceList(data) {
 }
 
 /**
+ * @description 操作系统 中间件 数据库 类型列表
+ */
+export function getDeviceOsList() {
+  return request({
+    url: '/device/getDeviceOsList',
+    method: 'get',
+  })
+}
+
+/**
+ * @description 设备类型列表
+ */
+export function getDeviceTypeList() {
+  return request({
+    url: '/device/getDeviceTypeList',
+    method: 'get',
+  })
+}
+
+/**
  * @description 导入设备
  */
 export function importDevice(data) {

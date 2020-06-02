@@ -82,6 +82,7 @@ export function getFlawListByDeviceId(data) {
  * @param firmPatch 厂商补丁
  * @param attachmentName 漏洞附件名称
  * @param attachmentUrl 漏洞附件地址
+ * @param cevNum CVE 编号
  */
 export function save(data) {
   return request({

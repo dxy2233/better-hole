@@ -42,7 +42,7 @@
       <baseCol prop="ipAddress" label="私网IP地址" />
       <baseCol label="操作">
         <template #button="props">
-          <button v-if="props.row.editVisible">
+          <button v-if="props.row.editVisible" @click="openDialog(props.row)">
             编辑
           </button>
           <button
@@ -63,10 +63,10 @@
       @changeCurrentPage="init"
     />
 
-    <baseDialog :visible.sync="dialog" top="20px">
+    <baseDialog :visible.sync="dialog">
       <template #title>编辑资产信息</template>
-      <baseForm ref="holeForm" :form="form" :rules="rules">
-        <!-- <baseFormItem label="设备名称">
+      <baseForm ref="assetsForm" :form="form" :rules="rules">
+        <baseFormItem label="设备名称">
           <input type="text" v-model="form.deviceName" />
         </baseFormItem>
         <baseFormItem label="设备类型">
@@ -82,24 +82,62 @@
           <input type="text" v-model="form.cabinetNumber" />
         </baseFormItem>
         <baseFormItem label="操作系统版本">
-          <input type="text" v-model="form.systemVersion" />
+          <select v-if="fromSelectDatas[0]" v-model="form.systemVersion">
+            <option
+              v-for="(item, index) in fromSelectDatas[0].enumListBOS"
+              :key="index"
+              :value="item.key"
+              >{{ item.value }}</option
+            >
+          </select>
         </baseFormItem>
         <baseFormItem label="中间件版本">
-          <input type="text" v-model="form.midVersion" />
+          <select v-if="fromSelectDatas[1]" v-model="form.midVersion">
+            <option
+              v-for="(item, index) in fromSelectDatas[1].enumListBOS"
+              :key="index"
+              :value="item.key"
+              >{{ item.value }}</option
+            >
+          </select>
         </baseFormItem>
         <baseFormItem label="数据库版本">
-          <input type="text" v-model="form.dbVersion" />
+          <select v-if="fromSelectDatas[2]" v-model="form.dbVersion">
+            <option
+              v-for="(item, index) in fromSelectDatas[2].enumListBOS"
+              :key="index"
+              :value="item.key"
+              >{{ item.value }}</option
+            >
+          </select>
+        </baseFormItem>
+        <baseFormItem label="IP地址">
+          <input type="text" v-model="form.ipAddress" />
+        </baseFormItem>
+        <baseFormItem label="端口">
+          <input type="text" v-model="form.port" />
+        </baseFormItem>
+        <baseFormItem label="应用WEB URL地址">
+          <input type="text" v-model="form.url" />
+        </baseFormItem>
+        <baseFormItem label="备注">
+          <input type="text" v-model="form.remark" />
         </baseFormItem>
         <button type="button" @click="submit">
           <svg-icon icon-class="save" />保存
-        </button> -->
+        </button>
       </baseForm>
     </baseDialog>
   </div>
 </template>
 
 <script>
-import { getDeviceList, deleteDeviceById } from '@/api/device'
+import {
+  getDeviceList,
+  deleteDeviceById,
+  getDeviceOsList,
+  save,
+} from '@/api/device'
 import { getSystemListByUser } from '@/api/system'
 
 export default {
@@ -116,7 +154,21 @@ export default {
       },
       systemListByUser: [],
       tableData: {},
-      form: {},
+      fromSelectDatas: [],
+      form: {
+        deviceName: '',
+        deviceSort: '',
+        deviceType: '',
+        position: '',
+        cabinetNumber: '',
+        systemVersion: '',
+        midVersion: '',
+        dbVersion: '',
+        ipAddress: '',
+        port: '',
+        url: '',
+        remark: '',
+      },
       rules: {},
       dialog: false,
     }
@@ -126,12 +178,27 @@ export default {
     getSystemListByUser().then((res) => {
       this.systemListByUser = res.data
     })
+    getDeviceOsList().then((res) => {
+      this.fromSelectDatas = res.data
+    })
   },
   methods: {
     init(isSearch) {
       if (isSearch) this.tableForm.startPage = 1
       getDeviceList(this.tableForm).then((res) => {
         this.tableData = res.data
+      })
+    },
+    openDialog(info) {
+      this.form = JSON.parse(JSON.stringify(info))
+      this.dialog = true
+    },
+    submit() {
+      if (!this.$refs.assetsForm.validate()) return
+      save(this.form).then((res) => {
+        this.dialog = false
+        this.$message({ content: res.message, type: 'success' })
+        this.init()
       })
     },
     remove(id) {

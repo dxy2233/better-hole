@@ -6,7 +6,7 @@
       </button>
       <baseTree
         ref="systemTree"
-        :treeData="treeData"
+        :treeData="treeData[0].nextNodes"
         label="orgName"
         children="nextNodes"
         removeField="deleteVisble"

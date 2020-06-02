@@ -142,6 +142,9 @@
         <baseFormItem label="厂商补丁">
           <input type="text" v-model="form.firmPatch" />
         </baseFormItem>
+        <baseFormItem label="CVE编号">
+          <input type="text" v-model="form.cevNum" />
+        </baseFormItem>
         <baseFormItem label="漏洞附件">
           <button type="button" @click="uploadFile">点击上传附件</button>
           {{ form.attachmentName }}
@@ -232,6 +235,7 @@ export default {
         seeLink: '',
         verifyMessage: '',
         firmPatch: '',
+        cevNum: '',
         attachmentName: '',
         attachmentUrl: '',
       },
