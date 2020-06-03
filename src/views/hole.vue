@@ -4,7 +4,9 @@
       <button @click="openDialog('漏洞录入')">
         <svg-icon icon-class="add" />手动录入
       </button>
-      <button><svg-icon icon-class="import" />导入文件</button>
+      <button @click="openDialogImport">
+        <svg-icon icon-class="import" />导入文件
+      </button>
       <label>
         信息系统
         <select v-model="tableForm.systemId">
@@ -128,7 +130,9 @@
           <input type="text" v-model="form.leakSolve" />
         </baseFormItem>
         <baseFormItem label="漏洞类型" prop="leakType" required>
-          <input type="text" v-model="form.leakType" />
+          <select v-model="form.leakType">
+            <option value="通用">通用</option>
+          </select>
         </baseFormItem>
         <baseFormItem label="漏洞链接">
           <input type="text" v-model="form.leakLink" />
@@ -137,7 +141,10 @@
           <input type="text" v-model="form.seeLink" />
         </baseFormItem>
         <baseFormItem label="验证信息">
-          <input type="text" v-model="form.verifyMessage" />
+          <select v-model="form.verifyMessage">
+            <option value="已验证">已验证</option>
+            <option value="未验证">未验证</option>
+          </select>
         </baseFormItem>
         <baseFormItem label="厂商补丁">
           <input type="text" v-model="form.firmPatch" />
@@ -146,7 +153,7 @@
           <input type="text" v-model="form.cevNum" />
         </baseFormItem>
         <baseFormItem label="漏洞附件">
-          <button type="button" @click="uploadFile">点击上传附件</button>
+          <button type="button" @click="uploadFile(1)">点击上传附件</button>
           {{ form.attachmentName }}
         </baseFormItem>
         <button type="button" @click="submit">
@@ -177,6 +184,30 @@
         </button>
       </baseForm>
     </baseDialog>
+
+    <!-- 导入文件 -->
+    <baseDialog :visible.sync="dialogImport">
+      <template #title>导入文件</template>
+      <baseForm ref="importForm" :form="importForm" :rules="importRules">
+        <baseFormItem label="系统名称" prop="systemId" required>
+          <select v-model="importForm.systemId">
+            <option
+              v-for="(item, index) in systemListByUser"
+              :key="index"
+              :value="item.id"
+              >{{ item.name }}</option
+            >
+          </select>
+        </baseFormItem>
+        <baseFormItem label="导入文件" prop="file" required>
+          <button type="button" @click="uploadFile(2)">点击上传附件</button>
+          {{ importForm.file.name }}
+        </baseFormItem>
+        <button type="button" @click="submitImport">
+          <svg-icon icon-class="save" />保存
+        </button>
+      </baseForm>
+    </baseDialog>
   </div>
 </template>
 
@@ -187,6 +218,7 @@ import {
   deleteById,
   flawFileUpload,
   save,
+  uploadFlawFile,
 } from '@/api/flaw'
 import { getSystemListByUser } from '@/api/system'
 
@@ -219,6 +251,7 @@ export default {
       },
       systemListByUser: [],
       tableData: {},
+      fileType: '',
       dialog: false,
       dialogTitle: '',
       form: {
@@ -273,6 +306,17 @@ export default {
           { required: true, message: '请选择漏洞状态', trigger: 'blur' },
         ],
       },
+      dialogImport: false,
+      importForm: {
+        systemId: '',
+        file: '',
+      },
+      importRules: {
+        systemId: [
+          { required: true, message: '请选择系统名称', trigger: 'change' },
+        ],
+        file: [{ required: true, message: '请上传文件', trigger: 'change' }],
+      },
     }
   },
   created() {
@@ -324,18 +368,42 @@ export default {
         )
       })
     },
-    uploadFile() {
+    uploadFile(type) {
+      // 1:漏洞附件 2:导入文件
+      this.fileType = type
       this.$refs.holeFile.dispatchEvent(new MouseEvent('click'))
     },
     upload(e) {
       let formData = new FormData()
       formData.append('file', e.target.files[0])
-      flawFileUpload(formData).then((res) => {
-        this.form.attachmentName = res.data.name
-        this.form.attachmentUrl = res.data.url
-        this.$message({ content: res.message, type: 'success' })
-      })
+      switch (this.fileType) {
+        case 1:
+          flawFileUpload(formData).then((res) => {
+            this.form.attachmentName = res.data.name
+            this.form.attachmentUrl = res.data.url
+            this.$message({ content: res.message, type: 'success' })
+          })
+          break
+        case 2:
+          this.importForm.file = e.target.files[0]
+          this.$refs.importForm.validate()
+          break
+      }
       this.$refs.holeFile.value = null
+    },
+    openDialogImport() {
+      this.dialogImport = true
+    },
+    submitImport() {
+      if (!this.$refs.importForm.validate()) return
+      let formData = new FormData()
+      formData.append('systemId', this.importForm.systemId)
+      formData.append('file', this.importForm.file)
+      uploadFlawFile(formData).then((res) => {
+        this.dialogImport = false
+        this.$message({ content: res.message, type: 'success' })
+        this.init()
+      })
     },
   },
 }

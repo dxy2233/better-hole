@@ -62,6 +62,7 @@ export function importDevice(data) {
 /**
  * @description 保存设备信息
  * @param id ID
+ * @param systemId 系统主键
  * @param deviceName 设备名称
  * @param deviceSort 设备类型
  * @param deviceType 设备厂家/型号

@@ -86,7 +86,7 @@
           <baseFormItem label="单位名称" prop="orgName" required>
             <input type="text" v-model="form.orgName" />
           </baseFormItem>
-          <baseFormItem label="上级节点" prop="parentId" required>
+          <baseFormItem label="上级节点">
             <baseCascader v-model="form.parentId" :data="treeData" />
           </baseFormItem>
         </div>

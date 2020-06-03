@@ -91,3 +91,14 @@ export function save(data) {
     data,
   })
 }
+
+/**
+ * @description 上传漏洞扫描报告
+ */
+export function uploadFlawFile(data) {
+  return request({
+    url: '/flaw/uploadFlawFile',
+    method: 'post',
+    data,
+  })
+}
