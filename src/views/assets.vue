@@ -69,6 +69,12 @@
     >
       <template #title>编辑资产信息</template>
       <baseForm ref="assetsForm" :form="form" :rules="rules">
+        <baseFormItem label="信息系统" required>
+          <input type="text" v-model="form.systemName" disabled />
+        </baseFormItem>
+        <baseFormItem label="导入人" required>
+          <input type="text" v-model="form.importName" disabled />
+        </baseFormItem>
         <baseFormItem label="设备名称" prop="deviceName" required>
           <input type="text" v-model="form.deviceName" />
         </baseFormItem>

@@ -144,7 +144,7 @@
           <textarea cols="20" rows="5" v-model="form.leakHazardDesc"></textarea>
         </baseFormItem>
         <baseFormItem label="漏洞解决方案">
-          <input type="text" v-model="form.leakSolve" />
+          <textarea cols="20" rows="5" v-model="form.leakSolve"></textarea>
         </baseFormItem>
         <baseFormItem label="漏洞类型" prop="leakType" required>
           <select v-model="form.leakType">
