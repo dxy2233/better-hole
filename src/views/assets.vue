@@ -63,16 +63,26 @@
       @changeCurrentPage="init"
     />
 
-    <baseDialog :visible.sync="dialog">
+    <baseDialog
+      :visible.sync="dialog"
+      @closed="closedDialog('form', 'assetsForm')"
+    >
       <template #title>编辑资产信息</template>
       <baseForm ref="assetsForm" :form="form" :rules="rules">
-        <baseFormItem label="设备名称">
+        <baseFormItem label="设备名称" prop="deviceName" required>
           <input type="text" v-model="form.deviceName" />
         </baseFormItem>
-        <baseFormItem label="设备类型">
-          <input type="text" v-model="form.deviceSort" />
+        <baseFormItem label="设备类型" prop="deviceSort" required>
+          <select v-model="form.deviceSort">
+            <option
+              v-for="(item, index) in deviceTypeList"
+              :key="index"
+              :value="item.key"
+              >{{ item.value }}</option
+            >
+          </select>
         </baseFormItem>
-        <baseFormItem label="设备厂家/型号">
+        <baseFormItem label="设备厂家/型号" prop="deviceType" required>
           <input type="text" v-model="form.deviceType" />
         </baseFormItem>
         <baseFormItem label="机房位置">
@@ -81,38 +91,42 @@
         <baseFormItem label="机柜编号">
           <input type="text" v-model="form.cabinetNumber" />
         </baseFormItem>
-        <baseFormItem label="操作系统版本">
-          <select v-if="fromSelectDatas[0]" v-model="form.systemVersion">
-            <option
-              v-for="(item, index) in fromSelectDatas[0].enumListBOS"
-              :key="index"
-              :value="item.key"
-              >{{ item.value }}</option
-            >
-          </select>
+        <baseFormItem
+          v-if="form.deviceSort === '1'"
+          key="sysOne"
+          label="操作系统版本"
+          prop="systemVersion"
+          required
+        >
+          <input type="text" v-model="form.systemVersion" />
+        </baseFormItem>
+        <baseFormItem v-else key="sysTwo" label="操作系统版本">
+          <input type="text" v-model="form.systemVersion" />
         </baseFormItem>
         <baseFormItem label="中间件版本">
-          <select v-if="fromSelectDatas[1]" v-model="form.midVersion">
+          <input type="text" v-model="form.midVersion" />
+          <!-- <select v-if="fromSelectDatas[1]" v-model="form.midVersion">
             <option
               v-for="(item, index) in fromSelectDatas[1].enumListBOS"
               :key="index"
               :value="item.key"
               >{{ item.value }}</option
             >
-          </select>
+          </select> -->
         </baseFormItem>
         <baseFormItem label="数据库版本">
-          <select v-if="fromSelectDatas[2]" v-model="form.dbVersion">
+          <input type="text" v-model="form.dbVersion" />
+          <!-- <select v-if="fromSelectDatas[2]" v-model="form.dbVersion">
             <option
               v-for="(item, index) in fromSelectDatas[2].enumListBOS"
               :key="index"
               :value="item.key"
               >{{ item.value }}</option
             >
-          </select>
+          </select> -->
         </baseFormItem>
-        <baseFormItem label="IP地址">
-          <input type="text" v-model="form.ipAddress" />
+        <baseFormItem label="IP地址" prop="ipAddress" required>
+          <input type="text" v-model="form.ipAddress" disabled />
         </baseFormItem>
         <baseFormItem label="端口">
           <input type="text" v-model="form.port" />
@@ -135,8 +149,8 @@
 import {
   getDeviceList,
   deleteDeviceById,
-  getDeviceOsList,
   save,
+  getDeviceTypeList,
 } from '@/api/device'
 import { getSystemListByUser } from '@/api/system'
 
@@ -154,7 +168,7 @@ export default {
       },
       systemListByUser: [],
       tableData: {},
-      fromSelectDatas: [],
+      deviceTypeList: [],
       form: {
         deviceName: '',
         deviceSort: '',
@@ -169,7 +183,23 @@ export default {
         url: '',
         remark: '',
       },
-      rules: {},
+      rules: {
+        deviceName: [
+          { required: true, message: '请输入设备名称', trigger: 'blur' },
+        ],
+        deviceSort: [
+          { required: true, message: '请输入设备类型', trigger: 'change' },
+        ],
+        deviceType: [
+          { required: true, message: '请输入设备厂家/型号', trigger: 'blur' },
+        ],
+        ipAddress: [
+          { required: true, message: '请输入IP地址', trigger: 'blur' },
+        ],
+        systemVersion: [
+          { required: true, message: '请输入操作系统版本', trigger: 'blur' },
+        ],
+      },
       dialog: false,
     }
   },
@@ -178,8 +208,8 @@ export default {
     getSystemListByUser().then((res) => {
       this.systemListByUser = res.data
     })
-    getDeviceOsList().then((res) => {
-      this.fromSelectDatas = res.data
+    getDeviceTypeList().then((res) => {
+      this.deviceTypeList = res.data
     })
   },
   methods: {
@@ -192,6 +222,10 @@ export default {
     openDialog(info) {
       this.form = JSON.parse(JSON.stringify(info))
       this.dialog = true
+    },
+    closedDialog(key, refName) {
+      // Object.assign(this.$data[key], this.$options.data()[key])
+      this.$refs[refName].clearErr()
     },
     submit() {
       if (!this.$refs.assetsForm.validate()) return

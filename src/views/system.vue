@@ -5,6 +5,7 @@
         <svg-icon icon-class="add" />新增单位
       </button>
       <baseTree
+        v-if="treeData[0]"
         ref="systemTree"
         :treeData="treeData[0].nextNodes"
         label="orgName"
@@ -25,7 +26,7 @@
           @click="clickSystem(item)"
           :class="{ active: item.id === activeSystem.id }"
         >
-          {{ item.name }}
+          <span class="txt">{{ item.name }}</span>
           <span class="afterward" @click="removeSystem(item.id)">删除</span>
         </li>
       </ul>
@@ -33,7 +34,11 @@
     <main>
       <div v-if="assetsTableData.list">
         <div class="caption">信息系统名称资产信息</div>
-        <baseTable :tableData="assetsTableData.list" @rowClick="assetsTableRow">
+        <baseTable
+          :tableData="assetsTableData.list"
+          @rowClick="assetsTableRow"
+          :rowClass="tableRowClassName"
+        >
           <baseCol prop="serialNumber" label="序号" />
           <baseCol prop="systemName" label="信息系统" />
           <baseCol prop="importName" label="导入人" />
@@ -79,10 +84,10 @@
       </div>
     </main>
 
-    <baseDialog :visible.sync="dialog">
+    <baseDialog :visible.sync="dialog" @closed="closedDialog('form')">
       <template #title>{{ dialogTitle }}</template>
       <baseForm ref="systemForm" :form="form" :rules="rules">
-        <div v-if="dialogTitle === '新增单位'">
+        <div v-if="dialogTitle === '新增单位'" key="one">
           <baseFormItem label="单位名称" prop="orgName" required>
             <input type="text" v-model="form.orgName" />
           </baseFormItem>
@@ -90,7 +95,7 @@
             <baseCascader v-model="form.parentId" :data="treeData" />
           </baseFormItem>
         </div>
-        <div v-else>
+        <div v-else key="two">
           <baseFormItem label="单位名称" required>
             <input type="text" v-model="form.orgName" disabled />
           </baseFormItem>
@@ -141,7 +146,6 @@ export default {
         orgName: '',
         parentId: '',
         // 系统
-        orgName: '',
         name: '',
         orgId: '',
       },
@@ -150,7 +154,7 @@ export default {
           { required: true, message: '请输入单位名称', trigger: 'blur' },
         ],
         parentId: [
-          { required: true, message: '请选择上级单位', trigger: 'change' },
+          { required: true, message: '请选择上级单位', trigger: 'blur' },
         ],
         name: [{ required: true, message: '请输入系统名称', trigger: 'blur' }],
       },
@@ -203,6 +207,9 @@ export default {
       }
       this.dialog = true
     },
+    closedDialog(key) {
+      Object.assign(this.$data[key], this.$options.data()[key])
+    },
     submit() {
       if (!this.$refs.systemForm.validate()) return
       if (this.dialogTitle === '新增单位') {
@@ -227,8 +234,8 @@ export default {
       this.activeSystem = info
       this.assetsTableForm.systemId = info.id
       this.initAssets()
-      // this.holeTableForm.systemId = info.id
-      // this.initHole()
+      this.holeTableForm.systemId = ''
+      this.holeTableData = {}
     },
     removeSystem(id) {
       this.$confirm('确认删除？', '提示').then(() => {
@@ -250,6 +257,9 @@ export default {
       this.holeTableForm.deviceId = item.id
       this.initHole()
     },
+    tableRowClassName(row) {
+      if (row.id === this.holeTableForm.deviceId) return 'prompt'
+    },
     initHole(isSearch) {
       if (isSearch) this.holeTableForm.startPage = 1
       getFlawListByDeviceId(this.holeTableForm).then((res) => {
@@ -266,12 +276,22 @@ export default {
   height: calc(100% + 40px);
   display: flex;
   > nav {
-    width: 200px;
+    // width: 200px;
+    flex: 1;
     overflow-y: auto;
-    ul {
+    /deep/ul {
       li {
         padding: 5px 0 5px 20px;
         cursor: pointer;
+        // display: flex;
+        // justify-content: space-around;
+        .txt {
+          display: inline-block;
+          width: 70%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
         &:hover {
           color: #158ae7;
           background: #cee9f8;
@@ -284,12 +304,12 @@ export default {
           height: 16px;
           display: inline-block;
           position: relative;
-          top: 3px;
+          top: -1px;
           margin-right: 5px;
           svg {
             position: absolute;
-            left: 2px;
-            top: 2px;
+            left: 3px;
+            top: 3px;
             font-size: 10px;
             color: #fff;
           }
@@ -317,10 +337,45 @@ export default {
     background: rgba(232, 243, 255, 1);
   }
   nav:nth-child(2) {
-    border: 1px solid #4884c2;
+    border-left: 1px solid #4884c2;
+    border-right: 1px solid #4884c2;
   }
   main {
-    padding: 20px;
+    flex: 4;
+    padding: 10px;
+    overflow-y: auto;
+    > div {
+      border: 1px solid #4884c2;
+      padding: 10px;
+      .caption {
+        margin: -10px -10px 10px -10px;
+        height: 30px;
+        line-height: 30px;
+        background: #559ada;
+        color: #fff;
+        text-indent: 10px;
+      }
+      table {
+        /deep/thead,
+        /deep/tr {
+          display: table;
+          width: calc(100% - 1px);
+          table-layout: fixed;
+          overflow: hidden;
+        }
+        /deep/thead {
+          width: calc(100% - 17px);
+        }
+        /deep/tbody {
+          display: block;
+          height: 260px;
+          overflow-y: scroll;
+        }
+      }
+    }
+  }
+  /deep/ .prompt {
+    background: #fffc03;
   }
 }
 </style>

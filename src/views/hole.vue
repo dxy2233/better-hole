@@ -23,7 +23,7 @@
         <input type="text" v-model="tableForm.title" />
       </label>
       <label>
-        危险级别
+        危害级别
         <select v-model="tableForm.hazardLevel">
           <option value="高">高</option>
           <option value="中">中</option>
@@ -47,7 +47,7 @@
       <baseCol prop="ipAddress" label="IP地址" />
       <baseCol prop="port" label="端口" />
       <baseCol prop="createTime" label="上传时间" />
-      <baseCol prop="hazardLevel" label="危险级别" />
+      <baseCol prop="hazardLevel" label="危害级别" />
       <baseCol prop="reformStatus" label="漏洞状态">
         <template #button="props">
           {{ props.row.reformStatus | reformStatusFilter }}
@@ -91,7 +91,7 @@
       <template #title>{{ dialogTitle }}</template>
       <baseForm ref="holeForm" :form="form" :rules="rules">
         <baseFormItem label="信息系统" prop="systemId" required>
-          <select v-model="form.systemId">
+          <select v-model="form.systemId" disabled>
             <option
               v-for="(item, index) in systemListByUser"
               :key="index"
@@ -101,16 +101,17 @@
           </select>
         </baseFormItem>
         <baseFormItem label="IP地址" prop="ipAddress" required>
-          <input type="text" v-model="form.ipAddress" />
+          <input type="text" v-model="form.ipAddress" disabled />
         </baseFormItem>
         <baseFormItem label="端口" prop="port" required>
-          <input type="text" v-model="form.port" />
+          <input type="text" v-model="form.port" disabled />
         </baseFormItem>
         <baseFormItem label="漏洞标题" prop="title" required>
           <input type="text" v-model="form.title" />
         </baseFormItem>
-        <baseFormItem label="危险级别" prop="hazardLevel" required>
+        <baseFormItem label="危害级别" prop="hazardLevel" required>
           <select v-model="form.hazardLevel">
+            <option value="全部">全部</option>
             <option value="高">高</option>
             <option value="中">中</option>
             <option value="低">低</option>
@@ -131,6 +132,7 @@
         </baseFormItem>
         <baseFormItem label="漏洞类型" prop="leakType" required>
           <select v-model="form.leakType">
+            <option value="全部">全部</option>
             <option value="通用">通用</option>
           </select>
         </baseFormItem>
@@ -166,15 +168,15 @@
     <baseDialog :visible.sync="dialogReform">
       <template #title>漏洞整改</template>
       <baseForm ref="reformForm" :form="reformForm" :rules="reformRules">
-        <baseFormItem label="项目名称" required>
-          <input type="text" v-model="reformForm.systemName" />
+        <baseFormItem label="信息系统">
+          <input type="text" v-model="reformForm.systemName" disabled />
         </baseFormItem>
-        <baseFormItem label="漏洞标题" required>
-          <input type="text" v-model="reformForm.title" />
+        <baseFormItem label="漏洞标题">
+          <input type="text" v-model="reformForm.title" disabled />
         </baseFormItem>
         <baseFormItem label="漏洞状态" prop="reformStatus" required>
           <select v-model="reformForm.reformStatus">
-            <option value="0">未整改</option>
+            <!-- <option value="0">未整改</option> -->
             <option value="1">已整改</option>
             <option value="2">挂起</option>
           </select>
@@ -282,7 +284,7 @@ export default {
         port: [{ required: true, message: '请输入端口', trigger: 'blur' }],
         title: [{ required: true, message: '请输入漏洞标题', trigger: 'blur' }],
         hazardLevel: [
-          { required: true, message: '请选择危险级别', trigger: 'blur' },
+          { required: true, message: '请选择危害级别', trigger: 'blur' },
         ],
         influenceSystem: [
           { required: true, message: '请输入影响系统', trigger: 'blur' },
