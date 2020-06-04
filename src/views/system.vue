@@ -67,7 +67,7 @@
           <baseCol prop="ipAddress" label="IP地址" />
           <baseCol prop="port" label="端口" />
           <baseCol prop="createTime" label="上传时间" />
-          <baseCol prop="hazardLevel" label="危险级别" />
+          <baseCol prop="hazardLevel" label="危害级别" />
           <baseCol prop="reformStatus" label="漏洞状态">
             <template #button="props">
               {{ props.row.reformStatus | reformStatusFilter }}

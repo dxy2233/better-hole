@@ -25,6 +25,7 @@
       <label>
         危害级别
         <select v-model="tableForm.hazardLevel">
+          <option value="全部">全部</option>
           <option value="高">高</option>
           <option value="中">中</option>
           <option value="低">低</option>
@@ -33,6 +34,7 @@
       <label>
         漏洞状态
         <select v-model="tableForm.reformStatus">
+          <option value="全部">全部</option>
           <option value="0">未整改</option>
           <option value="1">已整改</option>
           <option value="2">挂起</option>
@@ -87,11 +89,18 @@
     <input type="file" ref="holeFile" @change="upload($event)" />
 
     <!-- 漏洞录入 -->
-    <baseDialog :visible.sync="dialog" top="20px">
+    <baseDialog
+      :visible.sync="dialog"
+      top="20px"
+      @closed="closedDialog('form', 'holeForm')"
+    >
       <template #title>{{ dialogTitle }}</template>
       <baseForm ref="holeForm" :form="form" :rules="rules">
         <baseFormItem label="信息系统" prop="systemId" required>
-          <select v-model="form.systemId" disabled>
+          <select
+            v-model="form.systemId"
+            :disabled="dialogTitle === '编辑漏洞'"
+          >
             <option
               v-for="(item, index) in systemListByUser"
               :key="index"
@@ -101,17 +110,24 @@
           </select>
         </baseFormItem>
         <baseFormItem label="IP地址" prop="ipAddress" required>
-          <input type="text" v-model="form.ipAddress" disabled />
+          <input
+            type="text"
+            v-model="form.ipAddress"
+            :disabled="dialogTitle === '编辑漏洞'"
+          />
         </baseFormItem>
         <baseFormItem label="端口" prop="port" required>
-          <input type="text" v-model="form.port" disabled />
+          <input
+            type="text"
+            v-model="form.port"
+            :disabled="dialogTitle === '编辑漏洞'"
+          />
         </baseFormItem>
         <baseFormItem label="漏洞标题" prop="title" required>
           <input type="text" v-model="form.title" />
         </baseFormItem>
         <baseFormItem label="危害级别" prop="hazardLevel" required>
           <select v-model="form.hazardLevel">
-            <option value="全部">全部</option>
             <option value="高">高</option>
             <option value="中">中</option>
             <option value="低">低</option>
@@ -132,7 +148,6 @@
         </baseFormItem>
         <baseFormItem label="漏洞类型" prop="leakType" required>
           <select v-model="form.leakType">
-            <option value="全部">全部</option>
             <option value="通用">通用</option>
           </select>
         </baseFormItem>
@@ -338,6 +353,10 @@ export default {
       this.dialogTitle = type
       if (info) this.form = JSON.parse(JSON.stringify(info))
       this.dialog = true
+    },
+    closedDialog(key, refName) {
+      Object.assign(this.$data[key], this.$options.data()[key])
+      this.$refs[refName].clearErr()
     },
     submit() {
       if (!this.$refs.holeForm.validate()) return
