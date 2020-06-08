@@ -70,8 +70,8 @@ export default {
 <style lang="scss" scoped>
 a {
   display: block;
-  height: 23px;
-  line-height: 23px;
+  height: 40px;
+  line-height: 40px;
   border-bottom: 1px solid #2e80d6;
   &:link {
     color: #fff;

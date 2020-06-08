@@ -4,6 +4,7 @@
       <label>
         信息系统
         <select v-model="tableForm.systemId">
+          <option value="全部">全部</option>
           <option
             v-for="(item, index) in systemListByUser"
             :key="index"
@@ -18,7 +19,15 @@
       </label>
       <label>
         设备类型
-        <input type="text" v-model="tableForm.deviceSort" />
+        <select v-model="tableForm.deviceSort">
+          <option value="全部">全部</option>
+          <option
+            v-for="(item, index) in deviceTypeList"
+            :key="index"
+            :value="item.key"
+            >{{ item.value }}</option
+          >
+        </select>
       </label>
       <label>
         设备厂家/型号

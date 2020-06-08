@@ -14,12 +14,13 @@
     display: inline-block;
   }
   button {
-    background: #045fc9;
+    background: #559ada;
+    border:1px solid #0856a9;
     color: #fff;
     margin: 0 5px 5px 0;
     padding: 0 10px;
     &:hover {
-      background: #158ae7;
+      background: #1975d2;
     }
   }
 }

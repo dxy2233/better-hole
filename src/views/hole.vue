@@ -10,6 +10,7 @@
       <label>
         信息系统
         <select v-model="tableForm.systemId">
+          <option value="全部">全部</option>
           <option
             v-for="(item, index) in systemListByUser"
             :key="index"
@@ -36,8 +37,8 @@
         <select v-model="tableForm.reformStatus">
           <option value="全部">全部</option>
           <option value="0">未整改</option>
-          <option value="1">已整改</option>
-          <option value="2">挂起</option>
+          <option value="2">已整改</option>
+          <option value="1">挂起</option>
         </select>
       </label>
       <button @click="init(true)"><svg-icon icon-class="search" />搜索</button>
@@ -45,6 +46,7 @@
 
     <baseTable :tableData="tableData.list">
       <baseCol prop="systemName" label="信息系统" />
+      <baseCol prop="cveNum" label="CVE编号" />
       <baseCol prop="title" label="漏洞标题" />
       <baseCol prop="ipAddress" label="IP地址" />
       <baseCol prop="port" label="端口" />
@@ -167,7 +169,7 @@
           <input type="text" v-model="form.firmPatch" />
         </baseFormItem>
         <baseFormItem label="CVE编号">
-          <input type="text" v-model="form.cevNum" />
+          <input type="text" v-model="form.cveNum" />
         </baseFormItem>
         <baseFormItem label="漏洞附件">
           <button type="button" @click="uploadFile(1)">点击上传附件</button>
@@ -192,8 +194,8 @@
         <baseFormItem label="漏洞状态" prop="reformStatus" required>
           <select v-model="reformForm.reformStatus">
             <!-- <option value="0">未整改</option> -->
-            <option value="1">已整改</option>
-            <option value="2">挂起</option>
+            <option value="2">已整改</option>
+            <option value="1">挂起</option>
           </select>
         </baseFormItem>
         <button type="button" @click="submitReform">
@@ -246,9 +248,9 @@ export default {
       switch (val) {
         case 0:
           return '未整改'
-        case 1:
-          return '已整改'
         case 2:
+          return '已整改'
+        case 1:
           return '挂起'
       }
     },
@@ -285,7 +287,7 @@ export default {
         seeLink: '',
         verifyMessage: '',
         firmPatch: '',
-        cevNum: '',
+        cveNum: '',
         attachmentName: '',
         attachmentUrl: '',
       },

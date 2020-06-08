@@ -27,19 +27,19 @@ export const asyncRouterMap = {
     path: '/hole',
     component: () => import(/* webpackChunkName: 'hoel' */ '../views/hole'),
     name: 'Hole',
-    meta: { title: '漏洞管理', icon: 'process' },
+    meta: { title: '漏洞管理', icon: 'loophole' },
   },
   zcgl: {
     path: '/assets',
     component: () => import(/* webpackChunkName: 'assets' */ '../views/assets'),
     name: 'Assets',
-    meta: { title: '资产管理', icon: 'project' },
+    meta: { title: '资产管理', icon: 'assets' },
   },
   xtsz: {
     path: '/system',
     component: () => import(/* webpackChunkName: 'system' */ '../views/system'),
     name: 'System',
-    meta: { title: '系统管理', icon: 'backups' },
+    meta: { title: '系统管理', icon: 'system' },
   },
 }
 

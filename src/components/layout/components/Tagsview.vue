@@ -66,8 +66,8 @@ export default {
   }
   width: calc(100vw - 210px);
   height: 45px;
-  background: #ebebed;
-  border-bottom: 5px solid #018ad3;
+  background: #bbddff;
+  border-bottom: 5px solid #178ae5;
   padding-left: 20px;
   padding-top: 6px;
   ul {
@@ -87,9 +87,9 @@ export default {
       cursor: pointer;
     }
     .active {
-      background: #158ae7;
+      background: #1975d2;
       color: #fff;
-      border: 1px solid #158ae7;
+      border: 1px solid #1975d2;
     }
   }
   ul::-webkit-scrollbar {

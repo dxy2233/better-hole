@@ -5,9 +5,11 @@
     </div>
     <div class="wrap">
       <div class="content">
-        <img src="../../assets/img/loginpic.png" />
-        <div class="box">
+        <div class="title">
           <h3>个人登录</h3>
+          <span>Login User</span>
+        </div>
+        <div class="box">
           <span>
             <svg-icon icon-class="accounts" />
             <input
@@ -97,64 +99,71 @@ export default {
 .login {
   width: 100vw;
   height: 100vh;
-  background: url('../../assets/img/pagebg.jpg') no-repeat;
+  background: #000618 url('../../assets/img/pagebg.jpg') no-repeat;
   background-size: 100% 100%;
-  .logobox,
-  .content {
-    padding: 30px 0;
+  .logobox {
     width: 950px;
+    padding: 30px 0 3% 0;
     margin: 0 auto;
   }
-  .wrap {
-    margin: 1% 0 0 0;
-    background: rgba(0, 100, 255, 0.6);
-    .content {
-      padding: 50px 0;
-      width: 780px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .box {
-        text-align: center;
-        color: #fff;
-        width: 260px;
-        height: 240px;
-        background: url('../../assets/img/line.png') no-repeat center;
-        padding: 40px 30px;
-        span {
-          display: block;
-          position: relative;
-          margin: 12px 0;
-          text-align: left;
-          svg {
-            height: 100%;
-            padding: 0 10px;
-            position: absolute;
-            color: #0065ff;
-          }
-          input {
-            padding: 0 30px;
-            width: 100%;
-            height: 35px;
-            box-sizing: border-box;
-          }
-          input.vcode {
-            padding: 0 30px;
-            width: 60%;
-            margin: 0 5px 0 0;
-          }
-          img {
-            position: absolute;
-          }
-          button {
-            background: url('../../assets/img/buttonbg.png') repeat-x;
-            color: #fff;
-            margin: 5px 0;
-            height: 35px;
-            width: 100%;
-            &:hover {
-              opacity: 0.9;
-            }
+  .content {
+    width: 450px;
+    border: 5px solid #178ae5;
+    height: 365px;
+    margin: 0 auto;
+    .title {
+      height: 86px;
+      line-height: 86px;
+      color: #fff;
+      padding-left: 30px;
+      background: #178ae5;
+      h3 {
+        font-size: 22px;
+        margin-right: 10px;
+        display: inline-block;
+      }
+    }
+    .box {
+      text-align: center;
+      background: rgba($color: #fff, $alpha: 0.9);
+      width: 60%;
+      height: 209px;
+      padding: 35px 20%;
+      span {
+        display: block;
+        position: relative;
+        margin: 12px 0;
+        text-align: left;
+        svg {
+          height: 100%;
+          padding: 0 10px;
+          position: absolute;
+          color: #1975d2;
+        }
+        input {
+          padding: 0 30px;
+          width: 100%;
+          height: 35px;
+          border: 1px solid #8ad0ff;
+          box-sizing: border-box;
+          background: #fff;
+        }
+        input.vcode {
+          padding: 0 30px;
+          width: 60%;
+          margin: 0 5px 0 0;
+        }
+        img {
+          position: absolute;
+        }
+        button {
+          background: #d0b20f;
+          color: #fff;
+          margin: 5px 0;
+          height: 35px;
+          width: 100%;
+          &:hover {
+            opacity: 0.9;
           }
         }
       }

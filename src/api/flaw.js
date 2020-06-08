@@ -40,7 +40,7 @@ export function flawReform(id, reformStatus) {
  * @param systemId 信息系统id
  * @param title 漏洞标题
  * @param hazardLevel 危害级别
- * @param reformStatus 整改状态（0 未整改  1  已整改 2 挂起）
+ * @param reformStatus 整改状态（0 未整改  1 挂起   2  已整改）
  */
 export function getFlawList(data) {
   return request({
@@ -82,7 +82,7 @@ export function getFlawListByDeviceId(data) {
  * @param firmPatch 厂商补丁
  * @param attachmentName 漏洞附件名称
  * @param attachmentUrl 漏洞附件地址
- * @param cevNum CVE 编号
+ * @param cveNum CVE 编号
  */
 export function save(data) {
   return request({

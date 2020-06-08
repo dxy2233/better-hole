@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <img src="../../../assets/img/logo.png" title="三同步管理平台" />
+    <img src="../../../assets/img/logo.png" title="漏洞管理平台" />
     <div class="navbar-info">
       <div>
         <span><svg-icon icon-class="user" /></span>{{ info.name }}

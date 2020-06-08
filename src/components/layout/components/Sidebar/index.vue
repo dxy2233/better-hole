@@ -25,7 +25,7 @@ export default {
 .sidebar {
   width: 210px;
   overflow-y: auto;
-  background: #014192;
+  background: #0853a5 url('../../../../assets/img/left_bg.png') no-repeat;
   color: #fff;
 }
 </style>

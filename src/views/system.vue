@@ -327,9 +327,10 @@ export default {
     button {
       margin: 10px 20px;
       color: #fff;
-      background: #045fc9;
+      border: 1px solid #0856a9;
+      background: #559ada;
       &:hover {
-        background: #158ae7;
+        background: #0856a9;
       }
     }
   }
@@ -375,7 +376,7 @@ export default {
     }
   }
   /deep/ .prompt {
-    background: #fffc03;
+    background: #fffeb3;
   }
 }
 </style>
