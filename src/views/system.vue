@@ -34,24 +34,34 @@
     <main>
       <div v-if="assetsTableData.list">
         <div class="caption">信息系统名称资产信息</div>
-        <baseTable
-          :tableData="assetsTableData.list"
-          @rowClick="assetsTableRow"
-          :rowClass="tableRowClassName"
-        >
-          <baseCol prop="serialNumber" label="序号" />
-          <baseCol prop="systemName" label="信息系统" />
-          <baseCol prop="importName" label="导入人" />
-          <baseCol prop="deviceName" label="设备名称" />
-          <baseCol prop="deviceSort" label="设备类型" />
-          <baseCol prop="deviceType" label="设备厂家/型号" />
-          <baseCol prop="position" label="机房位置" />
-          <baseCol prop="cabinetNumber" label="机柜编号" />
-          <baseCol prop="systemVersion" label="操作系统版本" />
-          <baseCol prop="midVersion" label="中间件版本" />
-          <baseCol prop="dbVersion" label="数据库版本" />
-          <baseCol prop="ipAddress" label="私网IP地址" />
-        </baseTable>
+        <div class="table">
+          <baseTable
+            :tableData="assetsTableData.list"
+            @rowClick="assetsTableRow"
+            :rowClass="tableRowClassName"
+          >
+            <baseCol prop="serialNumber" label="序号" />
+            <baseCol prop="systemName" label="信息系统" />
+            <baseCol prop="importName" label="导入人" />
+            <baseCol prop="deviceName" label="设备名称" />
+            <baseCol prop="deviceSort" label="设备类型">
+              <template #button="props">
+                {{
+                  deviceTypeList
+                    .filter((item) => item.key === props.row.deviceSort)
+                    .map((item) => item.value)[0]
+                }}
+              </template>
+            </baseCol>
+            <baseCol prop="deviceType" label="设备厂家/型号" />
+            <baseCol prop="position" label="机房位置" />
+            <baseCol prop="cabinetNumber" label="机柜编号" />
+            <baseCol prop="systemVersion" label="操作系统版本" />
+            <baseCol prop="midVersion" label="中间件版本" />
+            <baseCol prop="dbVersion" label="数据库版本" />
+            <baseCol prop="ipAddress" label="IP地址" />
+          </baseTable>
+        </div>
         <basePagination
           :currentPage.sync="assetsTableForm.startPage"
           :total="assetsTableData.total"
@@ -61,20 +71,23 @@
       </div>
       <div v-if="holeTableData.list">
         <div class="caption">相关资产漏洞信息</div>
-        <baseTable :tableData="holeTableData.list">
-          <baseCol prop="systemName" label="信息系统" />
-          <baseCol prop="title" label="漏洞标题" />
-          <baseCol prop="ipAddress" label="IP地址" />
-          <baseCol prop="port" label="端口" />
-          <baseCol prop="createTime" label="上传时间" />
-          <baseCol prop="hazardLevel" label="危害级别" />
-          <baseCol prop="reformStatus" label="漏洞状态">
-            <template #button="props">
-              {{ props.row.reformStatus | reformStatusFilter }}
-            </template>
-          </baseCol>
-          <baseCol prop="reformTime" label="整改时间" />
-        </baseTable>
+        <div class="table">
+          <baseTable :tableData="holeTableData.list">
+            <baseCol prop="systemName" label="信息系统" />
+            <baseCol prop="title" label="漏洞标题" />
+            <baseCol prop="cveNum" label="CVE编号" />
+            <baseCol prop="ipAddress" label="IP地址" />
+            <baseCol prop="port" label="端口" />
+            <baseCol prop="createTime" label="上传时间" />
+            <baseCol prop="hazardLevel" label="危害级别" />
+            <baseCol prop="reformStatus" label="漏洞状态">
+              <template #button="props">
+                {{ props.row.reformStatus | reformStatusFilter }}
+              </template>
+            </baseCol>
+            <baseCol prop="reformTime" label="整改时间" />
+          </baseTable>
+        </div>
         <basePagination
           :currentPage.sync="holeTableForm.startPage"
           :total="holeTableData.total"
@@ -118,7 +131,7 @@ import {
   deleteSystemOrgNodeById,
 } from '@/api/systemOrgNode'
 import { getSystemListByOrgId, save, deleteById } from '@/api/system'
-import { getDeviceList } from '@/api/device'
+import { getDeviceList, getDeviceTypeList } from '@/api/device'
 import { getFlawListByDeviceId } from '@/api/flaw'
 
 export default {
@@ -158,6 +171,7 @@ export default {
         ],
         name: [{ required: true, message: '请输入系统名称', trigger: 'blur' }],
       },
+      deviceTypeList: [],
       activeSystem: {},
       assetsTableForm: {
         startPage: 1,
@@ -176,6 +190,9 @@ export default {
   created() {
     getSystemOrgNodeTree().then((res) => {
       this.treeData = res.data
+    })
+    getDeviceTypeList().then((res) => {
+      this.deviceTypeList = res.data
     })
   },
   methods: {
@@ -255,7 +272,7 @@ export default {
     },
     assetsTableRow(item) {
       this.holeTableForm.deviceId = item.id
-      this.initHole()
+      this.initHole(true)
     },
     tableRowClassName(row) {
       if (row.id === this.holeTableForm.deviceId) return 'prompt'
@@ -356,22 +373,31 @@ export default {
         color: #fff;
         text-indent: 10px;
       }
-      table {
-        /deep/thead,
-        /deep/tr {
-          display: table;
-          width: calc(100% - 1px);
-          table-layout: fixed;
-          overflow: hidden;
-        }
-        /deep/thead {
-          width: calc(100% - 17px);
-        }
-        /deep/tbody {
-          display: block;
-          height: 260px;
-          overflow-y: scroll;
-        }
+      .table {
+        height: 250px;
+        overflow: scroll;
+        // table {
+        // width: 1200px;
+        // /deep/thead,
+        // /deep/tr {
+        //   display: table;
+        //   width: calc(100% - 1px);
+        //   table-layout: fixed;
+        //   overflow: hidden;
+        // }
+        // /deep/thead {
+        //   width: calc(100% - 17px);
+        // }
+        // /deep/tbody {
+        // display: block;
+        // height: 250px;
+        // overflow-y: scroll;
+        // }
+        // ::-webkit-scrollbar {
+        //   background: red;
+        //   position: fixed;
+        // }
+        // }
       }
     }
   }

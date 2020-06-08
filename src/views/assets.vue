@@ -41,7 +41,15 @@
       <baseCol prop="systemName" label="信息系统" />
       <baseCol prop="importName" label="导入人" />
       <baseCol prop="deviceName" label="设备名称" />
-      <baseCol prop="deviceSort" label="设备类型" />
+      <baseCol prop="deviceSort" label="设备类型">
+        <template #button="props">
+          {{
+            deviceTypeList
+              .filter((item) => item.key === props.row.deviceSort)
+              .map((item) => item.value)[0]
+          }}
+        </template>
+      </baseCol>
       <baseCol prop="deviceType" label="设备厂家/型号" />
       <baseCol prop="position" label="机房位置" />
       <baseCol prop="cabinetNumber" label="机柜编号" />
@@ -144,7 +152,7 @@
           <input type="text" v-model="form.ipAddress" disabled />
         </baseFormItem>
         <baseFormItem label="端口">
-          <input type="text" v-model="form.port" />
+          <input type="text" v-model="form.port" disabled />
         </baseFormItem>
         <baseFormItem label="应用WEB URL地址">
           <input type="text" v-model="form.url" />
