@@ -56,7 +56,7 @@
       <baseCol prop="systemVersion" label="操作系统版本" />
       <baseCol prop="midVersion" label="中间件版本" />
       <baseCol prop="dbVersion" label="数据库版本" />
-      <baseCol prop="ipAddress" label="私网IP地址" />
+      <baseCol prop="ipAddress" label="IP地址" />
       <baseCol label="操作">
         <template #button="props">
           <button v-if="props.row.editVisible" @click="openDialog(props.row)">

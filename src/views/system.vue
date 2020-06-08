@@ -374,30 +374,8 @@ export default {
         text-indent: 10px;
       }
       .table {
-        height: 250px;
-        overflow: scroll;
-        // table {
-        // width: 1200px;
-        // /deep/thead,
-        // /deep/tr {
-        //   display: table;
-        //   width: calc(100% - 1px);
-        //   table-layout: fixed;
-        //   overflow: hidden;
-        // }
-        // /deep/thead {
-        //   width: calc(100% - 17px);
-        // }
-        // /deep/tbody {
-        // display: block;
-        // height: 250px;
-        // overflow-y: scroll;
-        // }
-        // ::-webkit-scrollbar {
-        //   background: red;
-        //   position: fixed;
-        // }
-        // }
+        height: 280px;
+        overflow-x: auto;
       }
     }
   }

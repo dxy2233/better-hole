@@ -135,13 +135,6 @@
             <option value="低">低</option>
           </select>
         </baseFormItem>
-        <baseFormItem label="影响系统" prop="influenceSystem" required>
-          <textarea
-            cols="20"
-            rows="5"
-            v-model="form.influenceSystem"
-          ></textarea>
-        </baseFormItem>
         <baseFormItem label="漏洞描述" prop="leakHazardDesc" required>
           <textarea cols="20" rows="5" v-model="form.leakHazardDesc"></textarea>
         </baseFormItem>
@@ -279,7 +272,6 @@ export default {
         ipAddress: '',
         port: '',
         hazardLevel: '',
-        influenceSystem: '',
         leakHazardDesc: '',
         leakSolve: '',
         leakType: '',
@@ -302,9 +294,6 @@ export default {
         title: [{ required: true, message: '请输入漏洞标题', trigger: 'blur' }],
         hazardLevel: [
           { required: true, message: '请选择危害级别', trigger: 'blur' },
-        ],
-        influenceSystem: [
-          { required: true, message: '请输入影响系统', trigger: 'blur' },
         ],
         leakHazardDesc: [
           { required: true, message: '请输入漏洞描述', trigger: 'blur' },
