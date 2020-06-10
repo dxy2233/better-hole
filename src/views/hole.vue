@@ -44,7 +44,7 @@
       <button @click="init(true)"><svg-icon icon-class="search" />搜索</button>
     </div>
 
-    <baseTable :tableData="tableData.list">
+    <baseTable :tableData="tableData.list" :rowClass="tableRowClassName">
       <baseCol prop="systemName" label="信息系统" />
       <baseCol prop="cveNum" label="CVE编号" />
       <baseCol prop="title" label="漏洞标题" />
@@ -340,6 +340,12 @@ export default {
         this.tableData = res.data
       })
     },
+    tableRowClassName(row) {
+      if (row.reformStatus === 2 || row.reformStatus === 1) return 'green'
+      else if (row.reformStatus === 0 && row.hazardLevel === '高') return 'red'
+      else if (row.reformStatus === 0 && row.hazardLevel === '中')
+        return 'yellow'
+    },
     openDialog(type, info) {
       this.dialogTitle = type
       if (info) this.form = JSON.parse(JSON.stringify(info))
@@ -421,4 +427,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.hole {
+  /deep/ .green {
+    background: #5bd60a;
+  }
+  /deep/ .red {
+    background: #ff0000;
+  }
+  /deep/ .yellow {
+    background: #ffe600;
+  }
+}
+</style>
