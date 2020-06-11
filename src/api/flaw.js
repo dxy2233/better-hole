@@ -72,7 +72,6 @@ export function getFlawListByDeviceId(data) {
  * @param ipAddress IP地址
  * @param port 端口
  * @param hazardLevel 危害级别
- * @param influenceSystem 影响系统
  * @param leakHazardDesc 漏洞描述
  * @param leakSolve 漏洞解决方案
  * @param leakType 漏洞类型
@@ -95,9 +94,9 @@ export function save(data) {
 /**
  * @description 上传漏洞扫描报告
  */
-export function uploadFlawFile(data) {
+export function uploadFlawReportFile(data) {
   return request({
-    url: '/flaw/uploadFlawFile',
+    url: '/flaw/uploadFlawReportFile',
     method: 'post',
     data,
   })

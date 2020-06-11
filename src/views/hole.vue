@@ -198,7 +198,10 @@
     </baseDialog>
 
     <!-- 导入文件 -->
-    <baseDialog :visible.sync="dialogImport">
+    <baseDialog
+      :visible.sync="dialogImport"
+      @closed="closedDialog('importForm', 'importForm')"
+    >
       <template #title>导入文件</template>
       <baseForm ref="importForm" :form="importForm" :rules="importRules">
         <baseFormItem label="系统名称" prop="systemId" required>
@@ -213,7 +216,9 @@
         </baseFormItem>
         <baseFormItem label="导入文件" prop="file" required>
           <button type="button" @click="uploadFile(2)">点击上传附件</button>
-          {{ importForm.file.name }}
+          <span v-for="(item, index) in importForm.file" :key="index">
+            {{ item.name }}
+          </span>
         </baseFormItem>
         <button type="button" @click="submitImport">
           <svg-icon icon-class="save" />保存
@@ -230,7 +235,7 @@ import {
   deleteById,
   flawFileUpload,
   save,
-  uploadFlawFile,
+  uploadFlawReportFile,
 } from '@/api/flaw'
 import { getSystemListByUser } from '@/api/system'
 
@@ -317,7 +322,7 @@ export default {
       dialogImport: false,
       importForm: {
         systemId: '',
-        file: '',
+        file: [],
       },
       importRules: {
         systemId: [
@@ -403,7 +408,7 @@ export default {
           })
           break
         case 2:
-          this.importForm.file = e.target.files[0]
+          this.importForm.file.push(e.target.files[0])
           this.$refs.importForm.validate()
           break
       }
@@ -415,9 +420,11 @@ export default {
     submitImport() {
       if (!this.$refs.importForm.validate()) return
       let formData = new FormData()
+      this.importForm.file.forEach((item) => {
+        formData.append('file', item)
+      })
       formData.append('systemId', this.importForm.systemId)
-      formData.append('file', this.importForm.file)
-      uploadFlawFile(formData).then((res) => {
+      uploadFlawReportFile(formData).then((res) => {
         this.dialogImport = false
         this.$message({ content: res.message, type: 'success' })
         this.init()
