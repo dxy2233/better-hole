@@ -216,9 +216,16 @@
         </baseFormItem>
         <baseFormItem label="导入文件" prop="file" required>
           <button type="button" @click="uploadFile(2)">点击上传附件</button>
-          <span v-for="(item, index) in importForm.file" :key="index">
+          <div v-for="(item, index) in importForm.file" :key="index">
             {{ item.name }}
-          </span>
+            <button
+              type="button"
+              class="remove"
+              @click="removeImportFile(index)"
+            >
+              删除
+            </button>
+          </div>
         </baseFormItem>
         <button type="button" @click="submitImport">
           <svg-icon icon-class="save" />保存
@@ -417,6 +424,9 @@ export default {
     openDialogImport() {
       this.dialogImport = true
     },
+    removeImportFile(index) {
+      this.importForm.file.splice(index, 1)
+    },
     submitImport() {
       if (!this.$refs.importForm.validate()) return
       let formData = new FormData()
@@ -444,6 +454,14 @@ export default {
   }
   /deep/ .yellow {
     background: #ffe600;
+  }
+  .remove {
+    border: 1px solid #ff4949;
+    color: #ff4949;
+    &:hover {
+      background-color: #ff4949;
+      color: #fff;
+    }
   }
 }
 </style>
