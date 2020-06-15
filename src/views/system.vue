@@ -72,7 +72,10 @@
       <div v-if="holeTableData.list">
         <div class="caption">相关资产漏洞信息</div>
         <div class="table">
-          <baseTable :tableData="holeTableData.list">
+          <baseTable
+            :tableData="holeTableData.list"
+            :rowClass="HoletableRowClassName"
+          >
             <baseCol prop="systemName" label="信息系统" />
             <baseCol prop="title" label="漏洞标题" />
             <baseCol prop="cveNum" label="CVE编号" />
@@ -283,6 +286,12 @@ export default {
         this.holeTableData = res.data
       })
     },
+    HoletableRowClassName(row) {
+      if (row.reformStatus === 2 || row.reformStatus === 1) return 'green'
+      else if (row.reformStatus === 0 && row.hazardLevel === '高') return 'red'
+      else if (row.reformStatus === 0 && row.hazardLevel === '中')
+        return 'yellow'
+    },
   },
 }
 </script>
@@ -381,6 +390,21 @@ export default {
   }
   /deep/ .prompt {
     background: #fffeb3;
+  }
+  /deep/ .green {
+    td:nth-child(7) {
+      background: #5bd60a;
+    }
+  }
+  /deep/ .red {
+    td:nth-child(7) {
+      background: #ff0000;
+    }
+  }
+  /deep/ .yellow {
+    td:nth-child(7) {
+      background: #ffe600;
+    }
   }
 }
 </style>

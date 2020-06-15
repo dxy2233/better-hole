@@ -447,13 +447,19 @@ export default {
 <style lang="scss" scoped>
 .hole {
   /deep/ .green {
-    background: #5bd60a;
+    td:nth-child(7) {
+      background: #5bd60a;
+    }
   }
   /deep/ .red {
-    background: #ff0000;
+    td:nth-child(7) {
+      background: #ff0000;
+    }
   }
   /deep/ .yellow {
-    background: #ffe600;
+    td:nth-child(7) {
+      background: #ffe600;
+    }
   }
   .remove {
     border: 1px solid #ff4949;
