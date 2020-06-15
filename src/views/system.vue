@@ -141,9 +141,9 @@ export default {
       switch (val) {
         case 0:
           return '未整改'
-        case 1:
-          return '已整改'
         case 2:
+          return '已整改'
+        case 1:
           return '挂起'
       }
     },
